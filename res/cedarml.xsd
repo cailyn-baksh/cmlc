@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cedarml">
+    <xs:annotation>
+      <xs:documentation>The root element of all CedarML files</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="import" type="importType" maxOccurs="unbounded" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Imports another CedarML file's definitions into this one.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="widget" type="widgetType" maxOccurs="unbounded" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Defines a custom widget type.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="window" type="windowType" maxOccurs="unbounded" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Describes a window</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+
+      <xs:attribute name="version" use="required" fixed="1.0" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="importType">
+    <xs:attribute name="path" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="widgetType">
+    <xs:sequence>
+      <xs:element name="attr" type="attrType" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Define an attribute for a custom widget's XML representation</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="constructor" type="ctorType" maxOccurs="1" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Defines how to call a widget's constructor function</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="init" type="initType" maxOccurs="1" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Defines additional initialization to be done after the constructor</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="colors" minOccurs="0" maxOccurs="1" type="colorsType">
+        <xs:annotation>
+          <xs:documentation>Sets the colors for the widget</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="contentType" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="attrType">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="type" type="cedarmlTypes" default="str" />
+    <xs:attribute name="default" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="ctorType">
+    <xs:sequence>
+      <xs:element name="param" minOccurs="0" maxOccurs="unbounded" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A parameter for the constructor. The content is a template</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="initType">
+    <xs:sequence>
+      <xs:element name="set-property" type="setPropertyType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Dispatch EVENT_SETPROPERTY to a widget.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="setPropertyType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="windowType">
+    <xs:sequence>
+      <xs:element name="colors" minOccurs="0" maxOccurs="1" type="colorsType">
+        <xs:annotation>
+          <xs:documentation>Sets the default colors for the window</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="menu" minOccurs="0" maxOccurs="1" type="menuType">
+        <xs:annotation>
+          <xs:documentation>Sets the menu for the window</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="timer" minOccurs="0" maxOccurs="unbounded" type="timerType">
+        <xs:annotation>
+          <xs:documentation>A timer for the window</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="body" minOccurs="0" maxOccurs="1" type="bodyType">
+
+      </xs:element>
+    </xs:sequence>
+
+    <xs:attribute name="handler" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="colorsType">
+    <xs:attribute name="fg" use="required" type="hexByte" />
+    <xs:attribute name="bg" use="required" type="hexByte" />
+    <xs:attribute name="alt" use="required" type="hexByte" />
+  </xs:complexType>
+
+  <xs:complexType name="menuType">
+    <xs:sequence>
+      <xs:element name="menuitem" minOccurs="0" maxOccurs="unbounded" type="menuItemType">
+        <xs:annotation>
+          <xs:documentation>An item in a menu</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="menuItemType">
+    <xs:sequence>
+      <xs:element name="menu" minOccurs="0" maxOccurs="1" type="menuType">
+        <xs:annotation>
+          <xs:documentation>The contents of a submenu</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="type" type="menuItemTypeType" use="required" />
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="label" type="xs:string" />
+  </xs:complexType>
+
+  <xs:simpleType name="menuItemTypeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="separator" />
+      <xs:enumeration value="submenu" />
+      <xs:enumeration value="item" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="timerType">
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="period" type="xs:unsignedInt" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="bodyType">
+    <xs:sequence>
+      <xs:any minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="cedarmlTypes">
+    <xs:annotation>
+      <xs:documentation>
+        Types in the CedarML language.
+        int  - a signed integer
+        uint - an unsigned integer
+        bool - a boolean value
+        id   - An ID
+        var  - A variable
+        str  - A string
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="int" />
+      <xs:enumeration value="uint" />
+      <xs:enumeration value="bool" />
+      <xs:enumeration value="id" />
+      <xs:enumeration value="var" />
+      <xs:enumeration value="str" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="hexByte">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="0x[0-9a-fA-F]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

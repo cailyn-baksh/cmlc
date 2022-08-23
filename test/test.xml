@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cedarml>
+    <window handler="mainWindowHandler">
+        <colors fg="0xF0" bg="0x00" alt="0x1A" />
+
+        <menu>
+            <menuitem type="submenu" label="File">
+                <menu>
+                    <menuitem type="item" id="FILEMENU_OPEN" label="Open" />
+                    <menuitem type="item" id="FILEMENU_SAVE" label="Save" />
+                    <menuitem type="item" id="FILEMENU_SAVEAS" label="Save As" />
+
+                    <menuitem type="separator" />
+
+                    <menuitem type="item" id="FILEMENU_EXIT" label="Exit" />
+                </menu>
+            </menuitem>
+
+            <menuitem type="separator" />
+
+            <menuitem type="submenu" label="Help">
+                <menu>
+                    <menuitem type="item" id="HELPMENU_ABOUT" label="About" />
+                    <menuitem type="item" id="HELPMENU_HELP" label="Help" />
+                </menu>
+            </menuitem>
+        </menu>
+
+        <timer id="TMR_TIMER1" period="1000" />
+        <timer id="TMR_TIMER2" period="500" />
+
+        <body>
+            <label id="LBL_HELLO" x="0" y="0" width="70" height="15">Hello World</label>
+            <label x="0" y="20" width="50" height="10">Label2</label>
+
+            <button id="BTN_BUTTON1" x="90" y="10" width="50" height="20">Button1</button>
+        </body>
+    </window>
+</cedarml>

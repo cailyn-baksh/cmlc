@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cedarml version="1.0">
+    <widget name="label" contentType="str">
+        <attr name="id" type="id" default="ID_ANONYMOUS" />
+        <attr name="x" type="int" />
+        <attr name="y" type="int" />
+        <attr name="width" type="uint" />
+        <attr name="height" type="uint" />
+
+        <constructor name="CedarLabel">
+            <param>${id}</param>
+            <param>${x}</param>
+            <param>${y}</param>
+            <param>${width}</param>
+            <param>${height}</param>
+            <param>${content}</param>
+        </constructor>
+    </widget>
+
+    <widget name="button" contentType="str">
+        <attr name="id" type="id" />
+        <attr name="x" type="int" />
+        <attr name="y" type="int" />
+        <attr name="width" type="uint" />
+        <attr name="height" type="uint" />
+
+        <constructor name="CedarButton">
+            <param>${id}</param>
+            <param>${x}</param>
+            <param>${y}</param>
+            <param>${width}</param>
+            <param>${height}</param>
+            <param>${content}</param>
+        </constructor>
+    </widget>
+
+    <widget name="checkbox">
+        <attr name="id" type="id" />
+        <attr name="x" type="int" />
+        <attr name="y" type="int" />
+        <attr name="checked" type="bool" />
+
+        <constructor name="CedarCheckbox">
+            <param>${id}</param>
+            <param>${x}</param>
+            <param>${y}</param>
+        </constructor>
+
+        <init>
+            <set-property name="CHECKED">${checked}</set-property>
+        </init>
+    </widget>
+
+    <widget name="radiobutton">
+        <attr name="id" type="id" />
+        <attr name="x" type="int" />
+        <attr name="y" type="int" />
+        <attr name="group" type="var" />
+
+        <constructor name="CedarRadiobutton">
+            <param>${id}</param>
+            <param>${x}</param>
+            <param>${y}</param>
+            <param>&amp;${group}</param>
+        </constructor>
+    </widget>
+</cedarml>
