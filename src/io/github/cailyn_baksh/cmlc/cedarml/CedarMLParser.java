@@ -41,13 +41,9 @@ public class CedarMLParser {
                     } else if (depth > 0) {
                         // child tag; pass off to another function
                         switch (tagName) {
-                            case "import":
-                                handle_import();
-                                break;
-                            case "widget":
-                            case "window":
-                            default:
-                                throw new CedarMLFormatException(reader.getLocation(), "Invalid tag <%s>".formatted(tagName));
+                            case "import" -> handle_import();
+                            case "widget" -> handle_widget();
+                            default -> throw new CedarMLFormatException(reader.getLocation(), "Invalid tag <%s>".formatted(tagName));
                         }
                     } else {
                         // invalid
@@ -86,7 +82,7 @@ public class CedarMLParser {
     /**
      * Parses the widget tag. Called by the constructor
      */
-    private void handle_widget() throws CedarMLFormatException {
+    private void handle_widget() throws CedarMLFormatException, XMLStreamException {
         String schemaName;
         WidgetSchema schema;
         int event = reader.getEventType();
@@ -105,6 +101,28 @@ public class CedarMLParser {
         schema = new WidgetSchema(CedarMLType.fromString(contentType));
 
         // Start parsing subelements
+
+        while (reader.hasNext()) {
+            event = reader.next();
+
+            if (event == XMLStreamConstants.START_ELEMENT) {
+                String tagName = reader.getLocalName();
+
+                switch (tagName) {
+                    case "attr":
+                        String name = reader.getAttributeValue(null, "name");
+                        String type = reader.getAttributeValue(null, "type");
+                        String defaultValue = reader.getAttributeValue(null, "default");
+
+                        if (name == null || type == null) {
+                            throw new CedarMLFormatException(reader.getLocation(), "<attr> tag requires name and type attributes");
+                        }
+
+                        schema.attrs().put(name, new WidgetSchema.AttributeSchema(CedarMLType.fromString(type), defaultValue));
+                        break;
+                }
+            }
+        }
 
         document.addWidgetSchema(schemaName, schema);
     }

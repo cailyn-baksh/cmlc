@@ -15,9 +15,9 @@ public record WidgetSchema(
         Map<String, AttributeSchema> attrs,
         ConstructorSchema ctor
 ) {
-    record AttributeSchema(CedarMLType type, String defaultValue) {}
+    public record AttributeSchema(CedarMLType type, String defaultValue) {}
 
-    record ConstructorSchema(String name, List<String>params) {
+    public record ConstructorSchema(String name, List<String>params) {
         public ConstructorSchema() {
             this(null, new ArrayList<>());
         }
