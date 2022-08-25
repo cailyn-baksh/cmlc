@@ -21,6 +21,6 @@ public enum CedarMLType {
             }
         }
 
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Invalid type name " + str);
     }
 }

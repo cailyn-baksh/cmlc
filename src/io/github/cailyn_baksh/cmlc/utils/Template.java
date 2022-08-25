@@ -1,4 +1,4 @@
-package io.github.cailyn_baksh.cmlc.cedarml;
+package io.github.cailyn_baksh.cmlc.utils;
 
 import java.util.Map;
 

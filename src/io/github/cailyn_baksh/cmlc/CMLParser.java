@@ -7,6 +7,7 @@ import io.github.cailyn_baksh.cmlc.cedarml.widgets.SetPropertySchema;
 import io.github.cailyn_baksh.cmlc.utils.CodeWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -22,6 +23,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class CMLParser {
     }
 
     public static final URL CML_SCHEMA = CMLParser.class.getClassLoader().getResource("cedarml.rnc");
+    public static final URL CML_BUILTIN = CMLParser.class.getClassLoader().getResource("builtin.xml");
 
     public static final String GENERATED_COMMENT = """
             //
@@ -49,26 +52,34 @@ public class CMLParser {
             """;
 
     private Document cmlDocument;
+    private String srcFile;
     private String outDir;
     private String baseFileName;
 
     private Map<String, CMLWidgetSchema> widgetSchemas = new HashMap<>();
 
     public CMLParser(String srcFile, String outDir, String baseFileName) throws IOException, SAXException, ParserConfigurationException, CMLParseException {
+        this.srcFile = srcFile;
         this.outDir = outDir;
         this.baseFileName = baseFileName;
 
-        cmlDocument = loadXMLDocument(srcFile);
+        cmlDocument = loadXMLDocument(new File(srcFile));
 
         // Load widgets from document
         loadDocumentWidgets(cmlDocument);
+
+        // Import builtins
+        try {
+            Document builtin = loadXMLDocument(new File(CML_BUILTIN.toURI()));
+            loadDocumentWidgets(builtin);
+        } catch (URISyntaxException e) {}  // simply will not happen
 
         // Import widgets
         NodeList importNodes = cmlDocument.getElementsByTagName("import");
         for (int i=0; i < importNodes.getLength(); ++i) {
             Element elem = (Element)importNodes.item(i);
 
-            Document doc = loadXMLDocument(elem.getAttribute("path"));
+            Document doc = loadXMLDocument(new File(elem.getAttribute("path")));
             loadDocumentWidgets(doc);
         }
     }
@@ -87,15 +98,15 @@ public class CMLParser {
             // Load attrs
             NodeList attrNodes = elem.getElementsByTagName("attr");
             for (int j=0; j < attrNodes.getLength(); ++j) {
-                Element attrElem = (Element)widgetNodes.item(j);
+                Element attrElem = (Element)attrNodes.item(j);
                 AttrSchema attrSchema = new AttrSchema();
 
                 // Create new attr with type
-                attrSchema.type = CedarMLType.fromString(elem.getAttribute("type"));
+                attrSchema.type = CedarMLType.fromString(attrElem.getAttribute("type"));
 
                 // Set default value if applicable
                 if (attrElem.hasAttribute("default")) {
-                    attrSchema.defaultValue = elem.getAttribute("default");
+                    attrSchema.defaultValue = attrElem.getAttribute("default");
                 }
 
                 // Add attr to widget schema
@@ -117,7 +128,7 @@ public class CMLParser {
             }
 
             NodeList initNodes = elem.getElementsByTagName("init");
-            if (ctorNodes.getLength() > 0) {
+            if (initNodes.getLength() > 0) {
                 // There is init code for this widget
                 Element initElem = (Element)initNodes.item(0);
 
@@ -135,7 +146,7 @@ public class CMLParser {
         }
     }
 
-    private Document loadXMLDocument(String file) throws SAXException, ParserConfigurationException, IOException, CMLParseException {
+    private Document loadXMLDocument(File file) throws SAXException, ParserConfigurationException, IOException, CMLParseException {
         // FIXME: find a better way to do this (maybe an alternative to Jing?)
         LineNumberReader inputReader;
 
@@ -165,7 +176,7 @@ public class CMLParser {
         return doc;
     }
 
-    public void generateC() throws IOException {
+    public void generateC() throws IOException, CMLParseException {
         // Create PrintWriters for output
         CodeWriter source = new CodeWriter(outDir + baseFileName + ".c");
         CodeWriter header = new CodeWriter(outDir + baseFileName + ".h");
@@ -248,6 +259,19 @@ public class CMLParser {
 
             // Generate body
             Element body = (Element)bodyNodes.item(0);
+            for (Node node=body.getFirstChild(); node != null; node=node.getNextSibling()) {
+                if (!(node instanceof Element)) continue;  // Only look at elements
+                Element child = (Element)node;
+
+                if (!widgetSchemas.containsKey(child.getTagName())) {
+                    throw new CMLParseException("%s: Widget '%s' is undefined".formatted(srcFile, child.getTagName()));
+                }
+
+                CMLWidgetSchema schema = widgetSchemas.get(child.getTagName());
+
+                source.ln("cedar_AddWidget(&window, "
+                        + "");
+            }
 
             // End of method
             source.ln("""

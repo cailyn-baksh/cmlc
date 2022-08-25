@@ -16,18 +16,18 @@ widget = element widget {
 
     element attr {
         attribute name { text } &
-        attribute type { cmlType }? &
+        attribute type { cmlType } &
         attribute default { text }?
     }* &
 
     element constructor {
         attribute name { text } &
-        element param { text }*
+        element param { template }*
     }? &
 
     element init {
         element set-property {
-            attribute name { text },
+            attribute name { template },
 
             text
         }*
@@ -71,6 +71,8 @@ cmlType = token "int"
         | token "id"
         | token "var"
         | token "str"
+
+template = text
 
 anyElement =
     element * {

@@ -99,6 +99,9 @@ public class Main {
             System.err.println(e.getMessage());
             e.printStackTrace();
             return;
+        } catch (CMLParser.CMLParseException e) {
+            System.err.println(e.getMessage());
+            return;
         }
     }
 }
