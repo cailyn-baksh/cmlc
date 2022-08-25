@@ -3,11 +3,10 @@ package io.github.cailyn_baksh.cmlc;
 import io.github.cailyn_baksh.cmlc.cedarml.CedarMLType;
 import io.github.cailyn_baksh.cmlc.cedarml.widgets.AttrSchema;
 import io.github.cailyn_baksh.cmlc.cedarml.widgets.CMLWidgetSchema;
-import io.github.cailyn_baksh.cmlc.cedarml.widgets.ConstructorSchema;
 import io.github.cailyn_baksh.cmlc.cedarml.widgets.SetPropertySchema;
+import io.github.cailyn_baksh.cmlc.utils.CodeWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -168,26 +167,31 @@ public class CMLParser {
 
     public void generateC() throws IOException {
         // Create PrintWriters for output
-        PrintWriter source = new PrintWriter(new FileWriter(outDir + baseFileName + ".c", false));
-        PrintWriter header = new PrintWriter(new FileWriter(outDir + baseFileName + ".h", false));
+        CodeWriter source = new CodeWriter(outDir + baseFileName + ".c");
+        CodeWriter header = new CodeWriter(outDir + baseFileName + ".h");
 
-        header.print(GENERATED_COMMENT);
-        source.print(GENERATED_COMMENT);
+        header.ln(GENERATED_COMMENT);
+        source.ln(GENERATED_COMMENT);
 
         // Write beginning of header file
-        header.printf("""
-                #ifndef __CEDARML_%s_H_
-                #define __CEDARML_%s_H_
+        header.ln(
+                """
+                #ifndef __CEDARML_%1$s_H_
+                #define __CEDARML_%1$s_H_
                 
-                #ifdef __cplusplus
+                #ifndef __cplusplus
                 extern "C" {
                 #endif
                 
-                #include <uint24_t>\n
-                """, baseFileName.toUpperCase(), baseFileName.toUpperCase());
+                #include <stdint.h>
+                #include <cedar.h>
+                
+                """,
+                baseFileName.toUpperCase()
+        );
 
         // Include header file in source file
-        source.println("#include \"" + baseFileName + ".h\"\n");
+        source.ln("#include \"%s.h\"", baseFileName);
 
         // Generate window functions
         NodeList windowNodes = cmlDocument.getElementsByTagName("window");
@@ -201,40 +205,62 @@ public class CMLParser {
             // Get event handler function
             String handler = elem.getAttribute("handler");
 
-            NodeList colorNodes = elem.getElementsByTagName("colors");
-            NodeList menuNodes = elem.getElementsByTagName("menu");
-            NodeList timerNodes = elem.getElementsByTagName("timer");
-            NodeList bodyNodes = elem.getElementsByTagName("body");
-
-            // Extern the event handler
-            source.printf("extern CALLBACKRESULT %s(void *, EVENT, uint24_t)\n", handler);
+            NodeList colorNodes = elem.getElementsByTagName("colors");  // 0-1
+            NodeList menuNodes = elem.getElementsByTagName("menu");  // 0-1
+            NodeList timerNodes = elem.getElementsByTagName("timer");  // 0+
+            NodeList bodyNodes = elem.getElementsByTagName("body");  // 1
 
             // Write method prototype and definition
-            header.printf("void display%sWindow();\n", name);
-            source.printf("""
-                    void display%sWindow() {
-                        CedarWindow window;
-                        cedar_initWindow(&window);
-                        
-                        cedar_RegisterEventHandler(window.handlers, %s);
-                    """, name, handler);
+            header.ln("void display%sWindow();", name);
 
+            source.ln("""
+                    extern CALLBACKRESULT %1$s(void *, EVENT, uint24_t);
+                    
+                    void display%2$sWindow() {
+                    """, handler, name);
+            source.indent();
+            source.ln("""
+                    CedarWindow window;
+                    cedar_initWindow(&window);
+                    
+                    cedar_RegisterEventHandler(window.handlers, %s);
+                    
+                    """, handler);
 
             // TODO: implement colors
+            // Apply colors
             if (colorNodes.getLength() > 0) {
 
             }
 
+            // Create menu
+            if (menuNodes.getLength() > 0) {
+
+            }
+
+            // Add timers
+            for (int j=0; j < timerNodes.getLength(); ++j) {
+                Element timerElem = (Element)timerNodes.item(j);
+                String timerID = timerElem.getAttribute("id");
+                String period = timerElem.getAttribute("period");  // doesnt need to be parsed into a long since we turn it right back into a string
+                source.ln("cedar_AddTimer(&window, %s, %s);", timerID, period);
+            }
+
+            // Generate body
+            Element body = (Element)bodyNodes.item(0);
+
             // End of method
-            source.print("""
-                        cedar_Display(&window);
-                        cedar_DestroyWindow(&window);
-                    }
+            source.ln("""
+                    
+                    cedar_Display(&window);
+                    cedar_DestroyWindow(&window);
                     """);
+            source.outdent();
+            source.ln("}");
         }
 
         // Write end of include guards to header file
-        header.println("""
+        header.ln("""
                 
                 #ifdef __cplusplus
                 }
