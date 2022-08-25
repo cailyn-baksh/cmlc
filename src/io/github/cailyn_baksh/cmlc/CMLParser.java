@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class CMLParser {
-    public static final URL CML_SCHEMA = CMLParser.class.getClassLoader().getResource("cedarml.xsd");
+    public static final URL CML_SCHEMA = CMLParser.class.getClassLoader().getResource("cedarml.rnc");
 
     private Document cmlDocument;
 

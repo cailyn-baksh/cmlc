@@ -81,59 +81,6 @@ public class Main {
             e.printStackTrace();
             return;
         }
-
-        // Load XML
-        Document cedarMLDocument;
-
-        try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-            Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("cedarml.xsd"));
-
-            dbFactory.setValidating(true);
-            dbFactory.setSchema(schema);
-
-            DocumentBuilder builder = dbFactory.newDocumentBuilder();
-
-            FileInputStream inputStream = new FileInputStream(srcFile);
-
-            cedarMLDocument = builder.parse(inputStream);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return;
-        } catch (IOException e) {
-            System.err.println("Could not read file " + srcFile);
-            return;
-        } catch (SAXException e) {
-            System.err.println("Error parsing file " + srcFile);
-            return;
-        }
-
-        /*
-        // Parse CedarML file
-        try {
-            CedarMLParser cmlParser = new CedarMLParser(srcFile);
-        } catch (FileNotFoundException e) {
-            System.err.println("File " + srcFile + " does not exist");
-            return;
-        } catch (XMLStreamException e) {
-            System.err.println("%d:%d: XML syntax error in file %s: %s"
-                    .formatted(e.getLocation().getLineNumber(),
-                            e.getLocation().getColumnNumber(),
-                            srcFile, e.getMessage()));
-        } catch (CedarMLFormatException e) {
-            System.err.println("Syntax error while parsing " + srcFile);
-            System.err.println(e.getMessage());
-        }*/
-
-        // Write C output
-        try {
-            generateC(cedarMLDocument);
-        } catch (IOException e) {
-            System.err.println("Could not open output file for writing");
-            System.err.println(e.getMessage());
-        }
     }
 
     public void generateC(Document document) throws IOException {
