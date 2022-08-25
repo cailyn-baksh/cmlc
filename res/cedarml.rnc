@@ -35,6 +35,7 @@ widget = element widget {
 }
 
 window = element window {
+    attribute name { text } &
     attribute handler { text } &
 
     colors? &

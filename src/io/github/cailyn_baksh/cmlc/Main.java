@@ -1,21 +1,14 @@
 package io.github.cailyn_baksh.cmlc;
 
-import io.github.cailyn_baksh.cmlc.cedarml.CedarMLFormatException;
-import io.github.cailyn_baksh.cmlc.cedarml.CedarMLParser;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.*;
 
@@ -68,11 +61,12 @@ public class Main {
         }
 
         // Create output directory
-        if (outDir.charAt(outDir.length()-1) != '/') outDir += '/';
+        if (outDir.charAt(outDir.length() - 1) != '/') outDir += '/';
         new File(outDir).mkdirs();
 
         // Get base file name
         baseFileName = srcFile.substring(0, srcFile.lastIndexOf('.'));
+        baseFileName = baseFileName.substring(baseFileName.lastIndexOf('/')+1);
 
         CMLParser cmlParser;
         try {
@@ -88,29 +82,23 @@ public class Main {
             return;
         } catch (CMLParser.CMLParseException e) {
             // Error validating file against schema
+            // Also XML syntax errors
+            // most errors will occur here
             System.err.println(e.getMessage());
+            return;
         } catch (ParserConfigurationException e) {
             // idk what causes this one
             e.printStackTrace();
             return;
         }
-    }
 
-    public void generateC(Document document) throws IOException {
-        // Create PrintWriters for output
-        PrintWriter source = new PrintWriter(new FileWriter(outDir + baseFileName + ".c"));
-        PrintWriter header = new PrintWriter(new FileWriter(outDir + baseFileName + ".h"));
-
-        // Write beginning of include guards to header file
-        header.println("#ifndef __CEDARML_" + baseFileName.toUpperCase() + "_H_");
-        header.println("#define __CEDARML_" + baseFileName.toUpperCase() + "_H_");
-
-        // Include header file in source file
-        source.println("#include \"" + baseFileName + ".h\"");
-
-
-
-        // Write end of include guards to header file
-        header.println("#endif");
+        try {
+            cmlParser.generateC();
+        } catch (IOException e) {
+            System.err.println("Could not open output file");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        }
     }
 }

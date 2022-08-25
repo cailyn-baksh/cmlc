@@ -21,6 +21,6 @@ public enum CedarMLType {
             }
         }
 
-        return null;
+        throw new IllegalArgumentException();
     }
 }

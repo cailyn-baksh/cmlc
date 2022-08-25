@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cedarml version="1.0">
-    <window handler="mainWindowHandler">
+    <window name="main" handler="mainWindowHandler">
         <colors fg="0xF0" bg="0x00" alt="0x1A" />
 
         <menu>
