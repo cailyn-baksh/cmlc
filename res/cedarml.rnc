@@ -1,4 +1,5 @@
 start = element cedarml {
+    attribute version { string "1.0" } &
     import* &
     widget* &
     window*
@@ -20,6 +21,7 @@ widget = element widget {
     }* &
 
     element constructor {
+        attribute name { text } &
         element param { text }*
     }? &
 
@@ -48,13 +50,12 @@ window = element window {
 
 menu = element menu {
     element menuitem {
-        attribute id { text },
-        attribute label { text },
-
-        (attribute type { token "separator" | token "item" }
-        | (attribute type { token "submenu" }, menu?)
+        (
+            attribute type { token "separator" }
+            | ( attribute type { token "submenu" }, attribute label { text }, menu?)
+            | ( attribute type { token "item" }, attribute id { text }, attribute label { text } )
         )
-    }
+    }*
 }
 
 colors = element colors {

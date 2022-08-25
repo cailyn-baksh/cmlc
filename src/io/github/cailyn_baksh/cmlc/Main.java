@@ -34,6 +34,13 @@ public class Main {
     private String baseFileName;
 
     public static void main(String[] args) {
+        // Config Jing RNC SchemaFactory
+        // https://pages.lip6.fr/Jean-Francois.Perrot/XML-Int/Session3/RNG/#mozTocId175276
+        System.setProperty(
+                SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI,
+                "com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory"
+        );
+
         new Main().doMain(args);
     }
 
@@ -74,7 +81,7 @@ public class Main {
             System.err.println("Could not open file " + srcFile + " for reading");
             return;
         } catch (SAXException e) {
-            System.err.println("Error parsing file " + srcFile + ":");
+            System.err.print("Error parsing file " + srcFile + ": ");
             System.err.println(e.getMessage());
             return;
         } catch (ParserConfigurationException e) {

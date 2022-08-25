@@ -21,6 +21,12 @@
             <artifactId>args4j</artifactId>
             <version>2.33</version>
         </dependency>
+        <dependency>
+            <groupId>org.relaxng</groupId>
+            <artifactId>jing</artifactId>
+            <version>20220510</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
