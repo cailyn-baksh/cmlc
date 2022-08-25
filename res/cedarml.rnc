@@ -1,0 +1,78 @@
+start = element cedarml {
+    import* &
+    widget* &
+    window*
+}
+
+import = element import {
+    attribute path { text }
+}
+
+widget = element widget {
+    attribute name { text } &
+
+    attribute contentType { cmlType }? &
+
+    element attr {
+        attribute name { text } &
+        attribute type { cmlType }? &
+        attribute default { text }?
+    }* &
+
+    element constructor {
+        element param { text }*
+    }? &
+
+    element init {
+        element set-property {
+            attribute name { text },
+
+            text
+        }*
+    }?
+}
+
+window = element window {
+    attribute handler { text } &
+
+    colors? &
+    menu? &
+    element timer {
+        attribute id { text },
+        attribute period { xsd:unsignedInt }
+    }* &
+    element body {
+        anyElement*
+    }
+}
+
+menu = element menu {
+    element menuitem {
+        attribute id { text },
+        attribute label { text },
+
+        (attribute type { token "separator" | token "item" }
+        | (attribute type { token "submenu" }, menu?)
+        )
+    }
+}
+
+colors = element colors {
+    attribute fg { text },
+    attribute bg { text },
+    attribute alt { text }
+}
+
+cmlType = token "int"
+        | token "uint"
+        | token "bool"
+        | token "id"
+        | token "var"
+        | token "str"
+
+anyElement =
+    element * {
+        (attribute * { text }
+        | text
+        | anyElement)*
+    }

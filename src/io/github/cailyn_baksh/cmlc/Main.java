@@ -42,10 +42,10 @@ public class Main {
      */
     public void doMain(String[] args) {
         // Parse args
-        CmdLineParser parser = new CmdLineParser(this);
+        CmdLineParser cmdLineParser = new CmdLineParser(this);
 
         try {
-            parser.parseArgument(args);
+            cmdLineParser.parseArgument(args);
         } catch (CmdLineException ex) {
             System.err.println(ex.getMessage());
             return;
@@ -55,7 +55,7 @@ public class Main {
             System.out.println("Usage: cmlc FILE [OPTIONS...]");
             System.out.println("Compiles CedarML files into C source code.\n");
 
-            parser.printUsage(System.out);
+            cmdLineParser.printUsage(System.out);
             System.out.println();
         }
 
@@ -65,6 +65,21 @@ public class Main {
 
         // Get base file name
         baseFileName = srcFile.substring(0, srcFile.lastIndexOf('.'));
+
+        CMLParser cmlParser;
+        try {
+            cmlParser = new CMLParser(srcFile, outDir, baseFileName);
+        } catch (IOException e) {
+            System.err.println("Could not open file " + srcFile + " for reading");
+            return;
+        } catch (SAXException e) {
+            System.err.println("Error parsing file " + srcFile + ":");
+            System.err.println(e.getMessage());
+            return;
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            return;
+        }
 
         // Load XML
         Document cedarMLDocument;
@@ -131,6 +146,8 @@ public class Main {
 
         // Include header file in source file
         source.println("#include \"" + baseFileName + ".h\"");
+
+
 
         // Write end of include guards to header file
         header.println("#endif");
