@@ -57,6 +57,7 @@ public class Main {
 
             cmdLineParser.printUsage(System.out);
             System.out.println();
+            return;
         }
 
         // Create output directory
