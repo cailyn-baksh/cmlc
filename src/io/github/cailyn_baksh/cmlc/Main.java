@@ -78,13 +78,19 @@ public class Main {
         try {
             cmlParser = new CMLParser(srcFile, outDir, baseFileName);
         } catch (IOException e) {
+            // Error opening file
             System.err.println("Could not open file " + srcFile + " for reading");
             return;
         } catch (SAXException e) {
+            // Error parsing file into DOM
             System.err.print("Error parsing file " + srcFile + ": ");
             System.err.println(e.getMessage());
             return;
+        } catch (CMLParser.CMLParseException e) {
+            // Error validating file against schema
+            System.err.println(e.getMessage());
         } catch (ParserConfigurationException e) {
+            // idk what causes this one
             e.printStackTrace();
             return;
         }
