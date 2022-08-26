@@ -44,6 +44,9 @@ window = element window {
         attribute id { text },
         attribute period { xsd:unsignedInt }
     }* &
+    element global {
+        attribute name { text }
+    }* &
     element body {
         anyElement*
     }

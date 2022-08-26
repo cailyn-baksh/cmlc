@@ -176,6 +176,7 @@ public class CMLParser {
         return doc;
     }
 
+    // TODO: refactor this to make it prettier
     public void generateC() throws IOException, CMLParseException {
         // Create PrintWriters for output
         CodeWriter source = new CodeWriter(outDir + baseFileName + ".c");
@@ -184,11 +185,13 @@ public class CMLParser {
         header.ln(GENERATED_COMMENT);
         source.ln(GENERATED_COMMENT);
 
+        String incGuardName = "__CEDARML_" + baseFileName.toUpperCase() + "_H_";
+
         // Write beginning of header file
         header.ln(
                 """
-                #ifndef __CEDARML_%1$s_H_
-                #define __CEDARML_%1$s_H_
+                #ifndef %1$s
+                #define %1$s
                 
                 #ifndef __cplusplus
                 extern "C" {
@@ -198,7 +201,7 @@ public class CMLParser {
                 #include <cedar.h>
                 
                 """,
-                baseFileName.toUpperCase()
+                incGuardName
         );
 
         // Include header file in source file
@@ -216,10 +219,21 @@ public class CMLParser {
             // Get event handler function
             String handler = elem.getAttribute("handler");
 
+            NodeList globalNodes = elem.getElementsByTagName("global"); // 0+
             NodeList colorNodes = elem.getElementsByTagName("colors");  // 0-1
             NodeList menuNodes = elem.getElementsByTagName("menu");  // 0-1
             NodeList timerNodes = elem.getElementsByTagName("timer");  // 0+
             NodeList bodyNodes = elem.getElementsByTagName("body");  // 1
+
+            // Handle globals
+            if (globalNodes.getLength() > 0) header.ln("#ifndef %s", incGuardName);
+            for (int j=0; j < globalNodes.getLength(); ++j) {
+                String globalName = ((Element)globalNodes.item(j)).getAttribute("name");
+
+                header.ln("extern CedarWidget *%s;", globalName);
+                source.ln("CedarWidget *%s;", globalName);
+            }
+            if (globalNodes.getLength() > 0) header.ln("#endif  // %s", incGuardName);
 
             // Write method prototype and definition
             header.ln("void display%sWindow();", name);
@@ -289,8 +303,8 @@ public class CMLParser {
                 #ifdef __cplusplus
                 }
                 #endif
-                #endif
-                """);
+                #endif  // %s
+                """, incGuardName);
 
         header.flush();
         source.flush();
