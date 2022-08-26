@@ -55,6 +55,8 @@ public class CMLParser {
     private String srcFile;
     private String outDir;
     private String baseFileName;
+    /** Identifies the file. Header files should append _H_ to this, and source files should append _C_. */
+    private String fileIDSymbol;
 
     private Map<String, CMLWidgetSchema> widgetSchemas = new HashMap<>();
 
@@ -62,6 +64,8 @@ public class CMLParser {
         this.srcFile = srcFile;
         this.outDir = outDir;
         this.baseFileName = baseFileName;
+
+        fileIDSymbol = "__CEDARML_" + baseFileName.toUpperCase();
 
         cmlDocument = loadXMLDocument(new File(srcFile));
 
@@ -182,16 +186,15 @@ public class CMLParser {
         CodeWriter source = new CodeWriter(outDir + baseFileName + ".c");
         CodeWriter header = new CodeWriter(outDir + baseFileName + ".h");
 
+        // Write generator ID comments
         header.ln(GENERATED_COMMENT);
         source.ln(GENERATED_COMMENT);
-
-        String incGuardName = "__CEDARML_" + baseFileName.toUpperCase() + "_H_";
 
         // Write beginning of header file
         header.ln(
                 """
-                #ifndef %1$s
-                #define %1$s
+                #ifndef %1$s_H_
+                #define %1$s_H_
                 
                 #ifndef __cplusplus
                 extern "C" {
@@ -201,11 +204,19 @@ public class CMLParser {
                 #include <cedar.h>
                 
                 """,
-                incGuardName
+                fileIDSymbol
         );
+
+        source.ln("#define %s_C_", fileIDSymbol);
 
         // Include header file in source file
         source.ln("#include \"%s.h\"", baseFileName);
+
+        // Declare globals
+        generateGlobals(source, header);
+
+        // Declare prototypes
+        declarePrototypes(source, header);
 
         // Generate window functions
         NodeList windowNodes = cmlDocument.getElementsByTagName("window");
@@ -219,30 +230,13 @@ public class CMLParser {
             // Get event handler function
             String handler = elem.getAttribute("handler");
 
-            NodeList globalNodes = elem.getElementsByTagName("global"); // 0+
             NodeList colorNodes = elem.getElementsByTagName("colors");  // 0-1
             NodeList menuNodes = elem.getElementsByTagName("menu");  // 0-1
             NodeList timerNodes = elem.getElementsByTagName("timer");  // 0+
             NodeList bodyNodes = elem.getElementsByTagName("body");  // 1
 
-            // Handle globals
-            if (globalNodes.getLength() > 0) header.ln("#ifndef %s", incGuardName);
-            for (int j=0; j < globalNodes.getLength(); ++j) {
-                String globalName = ((Element)globalNodes.item(j)).getAttribute("name");
-
-                header.ln("extern CedarWidget *%s;", globalName);
-                source.ln("CedarWidget *%s;", globalName);
-            }
-            if (globalNodes.getLength() > 0) header.ln("#endif  // %s", incGuardName);
-
-            // Write method prototype and definition
-            header.ln("void display%sWindow();", name);
-
-            source.ln("""
-                    extern CALLBACKRESULT %1$s(void *, EVENT, uint24_t);
-                    
-                    void display%2$sWindow() {
-                    """, handler, name);
+            // Write method definition
+            source.ln("void display%2$sWindow() {", handler, name);
             source.indent();
             source.ln("""
                     CedarWindow window;
@@ -283,6 +277,12 @@ public class CMLParser {
 
                 CMLWidgetSchema schema = widgetSchemas.get(child.getTagName());
 
+                String varName = child.getAttribute("var");  // The variable to assign this to
+
+                if (varName == null && schema.init.size() > 0) {
+                    // No variable name has been assigned to this widget, but we need a variable
+                }
+
                 source.ln("cedar_AddWidget(&window, "
                         + "");
             }
@@ -303,13 +303,68 @@ public class CMLParser {
                 #ifdef __cplusplus
                 }
                 #endif
-                #endif  // %s
-                """, incGuardName);
+                #endif  // %s_H_
+                """, fileIDSymbol);
 
         header.flush();
         source.flush();
 
         header.close();
         source.close();
+    }
+
+    /**
+     * Generate C code to declare globals. The generated code expects to be
+     * outside a method definition.
+     * @param src CodeWriter for the source file
+     * @param inc CodeWriter for the header file
+     */
+    private void generateGlobals(CodeWriter src, CodeWriter inc) {
+        NodeList globalList = cmlDocument.getElementsByTagName("global");
+
+        // Don't declare externs in the source file
+        inc.ln("#ifndef %s_C_", fileIDSymbol);
+
+        for (int i=0; i < globalList.getLength(); ++i) {
+            Element elem = (Element)globalList.item(i);
+            String name = elem.getAttribute("name");
+
+            // Write externs to header
+            inc.ln("extern CedarWidget *%s;", name);
+
+            // Write definitions to source
+            src.ln("CedarWidget *%s = NULL;", name);
+        }
+
+        inc.ln("#endif  // %s_C_", fileIDSymbol);
+    }
+
+    /**
+     * Create the name of the corresponding function for a window
+     * @param winName The name of the window
+     * @return The name of the function
+     */
+    private String funcName(String winName) {
+        winName = winName.substring(0, 1).toUpperCase() + winName.substring(1);
+        return "display" + winName + "Window";
+    }
+
+    /**
+     * Generate the necessary function prototypes in the header and source
+     * files.
+     * @param src The CodeWriter for the source file.
+     * @param inc The CodeWriter for the header file.
+     */
+    private void declarePrototypes(CodeWriter src, CodeWriter inc) {
+        NodeList windowList = cmlDocument.getElementsByTagName("window");
+
+        for (int i=0; i < windowList.getLength(); ++i) {
+            Element elem = (Element)windowList.item(i);
+            String fnName = funcName(elem.getAttribute("name"));
+            String handler = elem.getAttribute("handler");
+
+            inc.ln("void %s();", fnName);
+            src.ln("extern CALLBACKRESULT %s(void *, EVENT, uint24_t);", handler);
+        }
     }
 }
