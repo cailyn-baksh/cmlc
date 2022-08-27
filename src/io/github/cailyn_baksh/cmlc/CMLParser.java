@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import javax.xml.xpath.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -365,6 +366,32 @@ public class CMLParser {
 
             inc.ln("void %s();", fnName);
             src.ln("extern CALLBACKRESULT %s(void *, EVENT, uint24_t);", handler);
+        }
+    }
+
+    private void generateMenu(Element menuRootElem, CodeWriter src, CodeWriter inc) {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        XPathExpression menuitemExpr;
+        NodeList menuitems;
+
+        try {
+            menuitemExpr = xpath.compile("");
+            menuitems = (NodeList)menuitemExpr.evaluate(menuRootElem, XPathConstants.NODESET);
+        } catch (XPathExpressionException e) { return; }  // wont happen
+
+        for (int i=0; i < menuitems.getLength(); ++i) {
+            Element menuitem = (Element)menuitems.item(i);
+
+            String type = menuitem.getAttribute("type");
+
+            switch (type) {
+                case "separator":
+                    break;
+                case "item":
+                    break;
+                case "submenu":
+                    break;
+            }
         }
     }
 }

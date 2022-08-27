@@ -1,5 +1,6 @@
 package io.github.cailyn_baksh.cmlc;
 
+import io.github.cailyn_baksh.cmlc.utils.IdentifierGenerator;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -103,5 +104,11 @@ public class Main {
             System.err.println(e.getMessage());
             return;
         }
+
+        System.out.println(IdentifierGenerator.getIdentifier());
+        System.out.println(IdentifierGenerator.getIdentifier());
+        System.out.println(IdentifierGenerator.getIdentifier());
+        System.out.println(IdentifierGenerator.getIdentifier());
+        System.out.println(IdentifierGenerator.getIdentifier());
     }
 }
