@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"io.github.cailyn_baksh.cmlc"},{"l":"io.github.cailyn_baksh.cmlc.cedarml"},{"l":"io.github.cailyn_baksh.cmlc.cedarml.widgets"},{"l":"io.github.cailyn_baksh.cmlc.utils"}];updateSearchResults();
