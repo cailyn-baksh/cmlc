@@ -12,6 +12,8 @@ Compiles CedarML files into C source code.
  FILE               : The source file to compile
  -h (--help)        : Display this help message (default: true)
  -o (--output) PATH : Place output in this folder. (default: ./gui/)
+ -q (--quiet)       : Suppress all output (default: false)
+ -v (--verbose)     : Display verbose output (default: false)
 ```
 
 ## CedarML
