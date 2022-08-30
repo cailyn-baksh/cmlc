@@ -24,6 +24,7 @@ public class IdentifierGenerator {
         for (int i=0; i < 4; ++i) {
             hash ^= (byte)n;  // Casting to byte discards all but LSB
             hash *= FNV_PRIME;
+            n >>>= 8;
         }
 
         return hash;

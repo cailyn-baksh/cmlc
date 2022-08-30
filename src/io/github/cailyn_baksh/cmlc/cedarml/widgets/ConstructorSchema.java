@@ -9,7 +9,8 @@ public class ConstructorSchema {
     public String name;
     public List<String> params = new ArrayList<>();
 
-    public Template toTemplate() {
-        return new Template(name + "(" + String.join(", ", params) + ")");
+    @Override
+    public String toString() {
+        return name + "(" + String.join(", ", params) + ")";
     }
 }

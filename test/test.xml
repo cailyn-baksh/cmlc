@@ -4,7 +4,7 @@
         <colors fg="0xF0" bg="0x00" alt="0x1A" />
 
         <menu>
-            <menuitem type="submenu" label="File">
+            <menuitem type="submenu" id="MENU_FILE" label="File">
                 <menu>
                     <menuitem type="item" id="FILEMENU_OPEN" label="Open" />
                     <menuitem type="item" id="FILEMENU_SAVE" label="Save" />
@@ -18,7 +18,7 @@
 
             <menuitem type="separator" />
 
-            <menuitem type="submenu" label="Help">
+            <menuitem type="submenu" id="MENU_HELP" label="Help">
                 <menu>
                     <menuitem type="item" id="HELPMENU_ABOUT" label="About" />
                     <menuitem type="item" id="HELPMENU_HELP" label="Help" />
@@ -36,6 +36,11 @@
             <label x="0" y="20" width="50" height="10" var="lblLabel2">Label2</label>
 
             <button id="BTN_BUTTON1" x="90" y="10" width="50" height="20">Button1</button>
+
+            <var ctype="uint24_t" name="radioSelection" default="0" />
+            <radiobutton id="RAD_RADIO1" x="120" y="10" group="radioSelection" />
+            <radiobutton id="RAD_RADIO2" x="120" y="25" group="radioSelection" />
+            <radiobutton id="RAD_RADIO3" x="120" y="40" group="radioSelection" />
         </body>
     </window>
 </cedarml>

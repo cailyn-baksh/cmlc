@@ -48,6 +48,14 @@ public class Template {
             } else if (lastCh == '$' && ch == '{') {
                 // "${", beginning of a substitution
                 substitution = true;
+            } else {
+                if (lastCh == '$') {
+                    sb.append(lastCh);
+                }
+
+                if (ch != '$') {
+                    sb.append(ch);
+                }
             }
 
             lastCh = ch;

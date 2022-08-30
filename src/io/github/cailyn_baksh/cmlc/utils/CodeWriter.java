@@ -60,7 +60,9 @@ public class CodeWriter {
         for (String line : lines) {
             writer.printf(tab.repeat(indent) + line + "\n", args);
         }
+    }
 
+    public void ln() {
         writer.println();
     }
 

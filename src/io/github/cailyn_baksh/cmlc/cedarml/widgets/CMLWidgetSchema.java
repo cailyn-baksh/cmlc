@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CMLWidgetSchema {
-    public CedarMLType contentType;
+    public CedarMLType contentType = null;
     public Map<String, AttrSchema> attrs = new HashMap<>();
     public ConstructorSchema ctor = new ConstructorSchema();
     public List<IInitStep> init = new ArrayList<>();

@@ -1,26 +1,39 @@
 package io.github.cailyn_baksh.cmlc;
 
 import io.github.cailyn_baksh.cmlc.utils.IdentifierGenerator;
+import org.dom4j.DocumentException;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.SchemaFactory;
 import java.io.*;
+import java.util.Date;
+import java.util.logging.*;
 
 public class Main {
-    public static final String CML_VERSION = "1.0";
+    public static final String CMLC_VERSION = "0.1.0";
+
+    private static Logger logger = Logger.getLogger("io.github.cailyn_baksh.cmlc");
 
     @Option(name="-h", aliases={"--help"}, help=true, usage="Display this help message")
     private boolean showHelp;
 
     @Option(name="-o", aliases={"--output"}, usage="Place output in this folder.", metaVar="PATH")
     private String outDir = "./gui/";
+
+    @Option(name="-q", aliases={"--quiet"}, forbids={"-v", "--debug"}, usage="Suppress all output")
+    private boolean quiet;
+
+    @Option(name="-v", aliases={"--verbose"}, forbids={"--debug", "-q"}, usage="Display verbose output")
+    private boolean verbose;
+
+    @Option(name="--debug", forbids={"-v", "-q"}, hidden=true, usage="Display debugging information during compilation")
+    private boolean debug;
 
     @Argument(required=true, usage="The source file to compile", metaVar="FILE")
     private String srcFile;
@@ -34,6 +47,21 @@ public class Main {
                 SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI,
                 "com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory"
         );
+
+        // Config logger format
+        logger.setUseParentHandlers(false);
+
+        ConsoleHandler loggerHandler = new ConsoleHandler();
+        loggerHandler.setLevel(Level.ALL);
+        loggerHandler.setFormatter(new SimpleFormatter() {
+            private static final String format = "[%1$tT.%1$tL] [%2$-7s] %3$s\n";
+
+            @Override
+            public synchronized String format(LogRecord lr) {
+                return format.formatted(new Date(lr.getMillis()), lr.getLevel().getLocalizedName(), lr.getMessage());
+            }
+        });
+        logger.addHandler(loggerHandler);
 
         new Main().doMain(args);
     }
@@ -61,6 +89,17 @@ public class Main {
             return;
         }
 
+        // Set log level
+        if (quiet) {
+            logger.setLevel(Level.SEVERE);
+        } else if (verbose) {
+            logger.setLevel(Level.INFO);
+        } else if (debug) {
+            logger.setLevel(Level.FINEST);
+        } else {
+            logger.setLevel(Level.WARNING);
+        }
+
         // Create output directory
         if (outDir.charAt(outDir.length() - 1) != '/') outDir += '/';
         new File(outDir).mkdirs();
@@ -69,46 +108,35 @@ public class Main {
         baseFileName = srcFile.substring(0, srcFile.lastIndexOf('.'));
         baseFileName = baseFileName.substring(baseFileName.lastIndexOf('/')+1);
 
-        CMLParser cmlParser;
+        CMLCompiler compiler;
         try {
-            cmlParser = new CMLParser(srcFile, outDir, baseFileName);
+            compiler = new CMLCompiler(srcFile, outDir, baseFileName);
         } catch (IOException e) {
             // Error opening file
-            System.err.println("Could not open file " + srcFile + " for reading");
+            logger.severe("Could not open file " + srcFile + " for reading");
             return;
-        } catch (SAXException e) {
-            // Error parsing file into DOM
-            System.err.print("Error parsing file " + srcFile + ": ");
-            System.err.println(e.getMessage());
-            return;
-        } catch (CMLParser.CMLParseException e) {
+        } catch (CMLCompiler.CMLParseException e) {
             // Error validating file against schema
             // Also XML syntax errors
             // most errors will occur here
-            System.err.println(e.getMessage());
+            logger.severe(e.getMessage());
             return;
-        } catch (ParserConfigurationException e) {
-            // idk what causes this one
-            e.printStackTrace();
+        } catch (DocumentException e) {
+            // Error parsing file into DOM
+            logger.severe("Error parsing file " + srcFile + ": ");
+            logger.severe(e.getMessage());
             return;
         }
 
         try {
-            cmlParser.generateC();
+            compiler.generateC();
         } catch (IOException e) {
-            System.err.println("Could not open output file");
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            logger.severe("Could not open output file");
+            logger.severe(e.getMessage());
             return;
-        } catch (CMLParser.CMLParseException e) {
-            System.err.println(e.getMessage());
+        } catch (CMLCompiler.CMLParseException e) {
+            logger.severe(e.getMessage());
             return;
         }
-
-        System.out.println(IdentifierGenerator.getIdentifier());
-        System.out.println(IdentifierGenerator.getIdentifier());
-        System.out.println(IdentifierGenerator.getIdentifier());
-        System.out.println(IdentifierGenerator.getIdentifier());
-        System.out.println(IdentifierGenerator.getIdentifier());
     }
 }
