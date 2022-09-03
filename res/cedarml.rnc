@@ -71,9 +71,9 @@ menu = element menu {
 }
 
 colors = element colors {
-    attribute fg { text },
-    attribute bg { text },
-    attribute alt { text }
+    attribute fg { text }?,
+    attribute bg { text }?,
+    attribute alt { text }?
 }
 
 cmlType = token "int"
