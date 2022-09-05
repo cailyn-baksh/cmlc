@@ -17,8 +17,8 @@ this documentation is `1.0`.
 ## Children
 This element may contain the following child elements
 
-| Element                                     | Count |
-|---------------------------------------------|-------|
-| [`<import>`]({% link /cedarml/import.md %}) | 0+    |
-| [`<widget>`]({% link /cedarml/widget.md %}) | 0+    |
-| [`<window>`]({% link /cedarml/window.md %}) | 0+    |
+| Element                                    | Count |
+|--------------------------------------------|-------|
+| [`<import>`]({% link cedarml/import.md %}) | 0+    |
+| [`<widget>`]({% link cedarml/widget.md %}) | 0+    |
+| [`<window>`]({% link cedarml/window.md %}) | 0+    |

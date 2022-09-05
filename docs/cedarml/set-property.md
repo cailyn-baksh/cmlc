@@ -19,4 +19,4 @@ The content of this widget is a template used to construct the value to set the
 property to.
 
 ## See Also
-- [`<init>`]({% link /cedarml/init.md %})
+- [`<init>`]({% link cedarml/init.md %})

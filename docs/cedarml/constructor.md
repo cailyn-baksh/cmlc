@@ -17,9 +17,9 @@ The name of the C function to call to create the widget. This function must
 
 ## Children
 
-| Element                                   | Count |
-|-------------------------------------------|-------|
-| [`<param>`]({% link /cedarml/param.md %}) | 0+    |
+| Element                                  | Count |
+|------------------------------------------|-------|
+| [`<param>`]({% link cedarml/param.md %}) | 0+    |
 
 ## See Also
-- [`<widget>`]({% link /cedarml/widget.md %})
+- [`<widget>`]({% link cedarml/widget.md %})
