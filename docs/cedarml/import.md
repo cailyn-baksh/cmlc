@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<import>`
 
 Imports widgets from another file.

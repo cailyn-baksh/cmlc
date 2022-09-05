@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<constructor>`
 Defines the C constructor for the widget.
 

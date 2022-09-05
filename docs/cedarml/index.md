@@ -1,3 +1,7 @@
+---
+title: CedarML
+has_children: true
+---
 # CedarML Tags
 
 This section of documentation describes the CML format. CML is built on XML,

@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<init>`
 Describes initialization required by the widget outside the constructor.
 The constructor, if specified, is called before additional initialization is

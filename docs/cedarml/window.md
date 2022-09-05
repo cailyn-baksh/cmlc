@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<window>`
 Describes a window.
 

@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<widget>`
 Defines a custom widget. This definition describes two sides of a widget: its
 XML representation and its C representation.

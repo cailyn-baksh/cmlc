@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<attr>`
 Defines an attribute of a custom widget's XML tag.
 

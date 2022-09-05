@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<colors>`
 Sets a UI element's colors.
 

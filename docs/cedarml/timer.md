@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<timer>`
 Adds a timer to a window.
 

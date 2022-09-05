@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<set-property>`
 Dispatches an `EVENT_SETPROPERTY` to a widget.
 

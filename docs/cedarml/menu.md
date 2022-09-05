@@ -1,3 +1,6 @@
+---
+parent: CedarML
+---
 # `<menu>`
 Describes a menu
 
