@@ -7,7 +7,7 @@ has_children: true
 This section of documentation describes the CML format. CML is built on XML,
 so its documents are constructed from a series of XML tags. CML documents begin
 with an XML declaration, like all XML documents. After this is the root tag
-which in CML is [`<cedarml>`]({% link cedarml/cedarml.md %}).
+which in CML is [`<cedarml>`]({{ site.baseurl }}{% link cedarml/cedarml.md %}).
 
 ## Templates
 Some attributes and elements use templates as their types. Templates are a
@@ -32,4 +32,4 @@ values:
 | `var`  | A variable. Similar to `id`, but it must be a symbol declared in this document. |
 
 ## See Also
- - [`<cedarml>`]({% link cedarml/cedarml.md %})
+ - [`<cedarml>`]({{ site.baseurl }}{% link cedarml/cedarml.md %})

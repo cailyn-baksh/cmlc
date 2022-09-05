@@ -24,4 +24,4 @@ The default value of the attribute. If this is specified, then the attribute is
 optional. If it is omitted, then the attribute is required.
 
 ## See Also
-- [`<widget>`]({% link cedarml/widget.md %})
+- [`<widget>`]({{ site.baseurl }}{% link cedarml/widget.md %})

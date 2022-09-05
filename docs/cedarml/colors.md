@@ -11,6 +11,7 @@ Sets a UI element's colors.
 | `fg`      | String   | No*       |
 | `bg`      | String   | No*       |
 | `alt`     | String   | No*       |
+
 \* At least one of the three is required.
 
 ### `fg`
@@ -23,4 +24,4 @@ The background color.
 The alternate color
 
 ## See Also
-- [`<window>`]({% link cedarml/window.md %})
+- [`<window>`]({{ site.baseurl }}{% link cedarml/window.md %})

@@ -23,11 +23,11 @@ This element may contain the following child elements
 
 | Element                                     | Count |
 |---------------------------------------------|-------|
-| [`<colors>`]({% link cedarml/colors.md %})  | 0-1   |
-| [`<menu>`]({% link cedarml/menu.md %})      | 0-1   |
-| [`<timer>`]({% link cedarml/timer.md %})    | 0+    |
-| [`<global>`]({% link cedarml/global.md %})  | 0+    |
+| [`<colors>`]({{ site.baseurl }}{% link cedarml/colors.md %})  | 0-1   |
+| [`<menu>`]({{ site.baseurl }}{% link cedarml/menu.md %})      | 0-1   |
+| [`<timer>`]({{ site.baseurl }}{% link cedarml/timer.md %})    | 0+    |
+| [`<global>`]({{ site.baseurl }}{% link cedarml/global.md %})  | 0+    |
 | [`<body>`](#)                               | 1     |
 
 ## See Also
-- [`<cedarml>`]({% link cedarml/cedarml.md %})
+- [`<cedarml>`]({{ site.baseurl }}{% link cedarml/cedarml.md %})

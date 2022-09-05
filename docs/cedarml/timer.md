@@ -18,4 +18,4 @@ The ID of the timer; used to identify which timer triggered an `EVENT_TICK`.
 The number of milliseconds between timer ticks.
 
 ## See Also
-- [`<window>`]({% link cedarml/window.md %})
+- [`<window>`]({{ site.baseurl }}{% link cedarml/window.md %})

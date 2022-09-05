@@ -22,11 +22,11 @@ The type of this widget's XML tag's content.
 ## Children
 This element may contain the following child elements
  
-| Element                                              | Count |
-|------------------------------------------------------|-------|
-| [`<attr>`]({% link cedarml/attr.md %})               | 0+    |
-| [`<constructor>`]({% link cedarml/constructor.md %}) | 0-1   |
-| [`<init>`]({% link cedarml/init.md %})               | 0-1   |
+| Element                                                                | Count |
+|------------------------------------------------------------------------|-------|
+| [`<attr>`]({{ site.baseurl }}{% link cedarml/attr.md %})               | 0+    |
+| [`<constructor>`]({{ site.baseurl }}{% link cedarml/constructor.md %}) | 0-1   |
+| [`<init>`]({{ site.baseurl }}{% link cedarml/init.md %})               | 0-1   |
 
 ## See Also
-- [`<cedarml>`]({% link cedarml/cedarml.md %})
+- [`<cedarml>`]({{ site.baseurl }}{% link cedarml/cedarml.md %})

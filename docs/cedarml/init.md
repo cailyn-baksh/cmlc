@@ -9,9 +9,9 @@ performed.
 ## Children
 This element may contain the following child elements
 
-| Element                                                | Count |
-|--------------------------------------------------------|-------|
-| [`<set-property>`]({% link cedarml/set-property.md %}) | 0+    |
+| Element                                                                  | Count |
+|--------------------------------------------------------------------------|-------|
+| [`<set-property>`]({{ site.baseurl }}{% link cedarml/set-property.md %}) | 0+    |
 
 ## See Also
-- [`<widget>`]({% link cedarml/widget.md %})
+- [`<widget>`]({{ site.baseurl }}{% link cedarml/widget.md %})

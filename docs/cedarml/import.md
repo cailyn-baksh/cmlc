@@ -15,4 +15,4 @@ Imports widgets from another file.
 Specifies the path of the widget to import
 
 ## See Also
-- [`<cedarml>`]({% link cedarml/cedarml.md %})
+- [`<cedarml>`]({{ site.baseurl }}{% link cedarml/cedarml.md %})
