@@ -17,7 +17,7 @@ This element may contain the following defined child elements
 
 Additionally, the `<body>` element may use any defined widget elements. Widget
 child elements are defined through the
-[`<widget>`]({{ site.baseurl }}{{% link cedarml/widget.md %}) element. On top
+[`<widget>`]({{ site.baseurl }}{% link cedarml/widget.md %}) element. On top
 of the attributes defined by the `<widget>` element, custom widgets have the
 following additional attributes:
 
@@ -31,4 +31,4 @@ this variable will contain a pointer to this widget.
 
 ## See Also
 - [`<window>`]({{ site.baseurl }}{% link cedarml/window.md %})
-- [`<widget>`]({{ site.baseurl }}{{% link cedarml/widget.md %})
+- [`<widget>`]({{ site.baseurl }}{% link cedarml/widget.md %})
