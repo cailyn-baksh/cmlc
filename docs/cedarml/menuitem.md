@@ -31,6 +31,9 @@ item. This is not valid in `separator` items.
 This element may contain the following child elements only if `type` is
 `submenu`.
 
-| Element         | Count |
-|-----------------|-------|
-| [`<menu>`](#)   | 1     |
+| Element                        | Count |
+|--------------------------------|-------|
+| [`<menu>`]({% link menu.md %}) | 1     |
+
+## See Also
+- [`<menu>`]({% link menu.md %})

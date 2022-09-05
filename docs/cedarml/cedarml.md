@@ -14,8 +14,8 @@ this documentation is `1.0`.
 ## Children
 This element may contain the following child elements
 
-| Element         | Count |
-|-----------------|-------|
-| [`<import>`](#) | 0+    |
-| [`<widget>`](#) | 0+    |
-| [`<window>`](#) | 0+    |
+| Element                            | Count |
+|------------------------------------|-------|
+| [`<import>`]({% link import.md %}) | 0+    |
+| [`<widget>`]({% link widget.md %}) | 0+    |
+| [`<window>`]({% link window.md %}) | 0+    |

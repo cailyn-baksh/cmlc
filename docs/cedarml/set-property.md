@@ -14,3 +14,6 @@ corresponds to an existing property of the widget.
 ## Content
 The content of this widget is a template used to construct the value to set the
 property to.
+
+## See Also
+- [`<init>`]({% link init.md %})

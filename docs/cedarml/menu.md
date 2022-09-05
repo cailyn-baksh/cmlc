@@ -4,6 +4,9 @@ Describes a menu
 ## Children
 This element may contain the following child elements
 
-| Element           | Count |
-|-------------------|-------|
-| [`<menuitem>`](#) | 0+    |
+| Element                                | Count |
+|----------------------------------------|-------|
+| [`<menuitem>`]({% link menuitem.md %}) | 0+    |
+
+## See Also
+- [`<window>`]({% link window.md %})

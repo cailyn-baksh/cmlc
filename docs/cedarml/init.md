@@ -6,7 +6,9 @@ performed.
 ## Children
 This element may contain the following child elements
 
-| Element               | Count |
-|-----------------------|-------|
-| [`<set-property>`](#) | 0+    |
+| Element                                        | Count |
+|------------------------------------------------|-------|
+| [`<set-property>`]({% link set-property.md %}) | 0+    |
 
+## See Also
+- [`<widget>`]({% link widget.md %})

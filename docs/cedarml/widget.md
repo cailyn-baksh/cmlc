@@ -19,8 +19,11 @@ The type of this widget's XML tag's content.
 ## Children
 This element may contain the following child elements
  
-| Element              | Count |
-|----------------------|-------|
-| [`<attr>`](#)        | 0+    |
-| [`<constructor>`](#) | 0-1   |
-| [`<init>`](#)        | 0-1   |
+| Element                                      | Count |
+|----------------------------------------------|-------|
+| [`<attr>`]({% link attr.md %})               | 0+    |
+| [`<constructor>`]({% link constructor.md %}) | 0-1   |
+| [`<init>`]({% link init.md %})               | 0-1   |
+
+## See Also
+- [`<cedarml>`]({% link cedarml.md %})

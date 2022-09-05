@@ -18,3 +18,6 @@ The background color.
 
 ### `alt`
 The alternate color
+
+## See Also
+- [`<window>`]({% link window.md %})

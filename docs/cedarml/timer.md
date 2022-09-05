@@ -13,3 +13,6 @@ The ID of the timer; used to identify which timer triggered an `EVENT_TICK`.
 
 ### `period`
 The number of milliseconds between timer ticks.
+
+## See Also
+- [`<window>`]({% link window.md %})

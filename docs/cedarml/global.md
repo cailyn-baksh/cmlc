@@ -7,3 +7,6 @@ can allow you to access a widget from the event handler.
 | Attribute | Type     | Required? |
 |-----------|----------|-----------|
 | `name`    | String   | Yes       |
+
+## See Also
+- [`<window>`]({% link window.md %})
