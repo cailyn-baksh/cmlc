@@ -8,7 +8,7 @@ Usage coming soon. `cmlc -h` provides a brief usage message.
 
 ## CedarML
 CedarML (CML) is the markup language which CMLC compiles. The CML docs are
-available [here]({{ site.baseurl }}{% cedarml/index.md %}).
+available [here]({{ site.baseurl }}{% link cedarml/index.md %}).
 
 ## Internal Docs
 The internal documentation of CMLC is available at
