@@ -51,10 +51,11 @@ window = element window {
         element var {
             attribute ctype { text },
             attribute name { text },
-            attribute default { text }?
+            attribute default { text }?  # TODO: convert this to content
         }* &
         element * - var {
-            attribute * { text }*,
+            attribute var { text }?,
+            attribute * - var { text }*,
             text?
         }*
     }

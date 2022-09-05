@@ -10,3 +10,11 @@ search_enabled: true
 search:
   tokenizer_separator: /[\s\-_]+/
 heading_anchors: true
+
+defaults:
+  -
+    scope:
+      path: "javadoc"
+      type: "pages"
+    values:
+      nav_exclude: true
