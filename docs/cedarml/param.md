@@ -10,4 +10,4 @@ the constructor's function call, in the order that the `<param>` tags were
 specified.
 
 ## See Also
-- [`<constructor>`]({% link constructor.md %})
+- [`<constructor>`]({% link /cedarml/constructor.md %})

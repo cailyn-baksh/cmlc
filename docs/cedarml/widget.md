@@ -24,9 +24,9 @@ This element may contain the following child elements
  
 | Element                                      | Count |
 |----------------------------------------------|-------|
-| [`<attr>`]({% link attr.md %})               | 0+    |
-| [`<constructor>`]({% link constructor.md %}) | 0-1   |
-| [`<init>`]({% link init.md %})               | 0-1   |
+| [`<attr>`]({% link /cedarml/attr.md %})               | 0+    |
+| [`<constructor>`]({% link /cedarml/constructor.md %}) | 0-1   |
+| [`<init>`]({% link /cedarml/init.md %})               | 0-1   |
 
 ## See Also
-- [`<cedarml>`]({% link cedarml.md %})
+- [`<cedarml>`]({% link /cedarml/cedarml.md %})

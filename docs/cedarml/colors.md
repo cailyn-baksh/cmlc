@@ -23,4 +23,4 @@ The background color.
 The alternate color
 
 ## See Also
-- [`<window>`]({% link window.md %})
+- [`<window>`]({% link /cedarml/window.md %})

@@ -36,7 +36,7 @@ This element may contain the following child elements only if `type` is
 
 | Element                        | Count |
 |--------------------------------|-------|
-| [`<menu>`]({% link menu.md %}) | 1     |
+| [`<menu>`]({% link /cedarml/menu.md %}) | 1     |
 
 ## See Also
-- [`<menu>`]({% link menu.md %})
+- [`<menu>`]({% link /cedarml/menu.md %})

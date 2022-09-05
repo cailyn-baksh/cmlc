@@ -12,4 +12,4 @@ can allow you to access a widget from the event handler.
 | `name`    | String   | Yes       |
 
 ## See Also
-- [`<window>`]({% link window.md %})
+- [`<window>`]({% link /cedarml/window.md %})

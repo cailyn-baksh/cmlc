@@ -11,7 +11,7 @@ This element may contain the following child elements
 
 | Element                                        | Count |
 |------------------------------------------------|-------|
-| [`<set-property>`]({% link set-property.md %}) | 0+    |
+| [`<set-property>`]({% link /cedarml/set-property.md %}) | 0+    |
 
 ## See Also
-- [`<widget>`]({% link widget.md %})
+- [`<widget>`]({% link /cedarml/widget.md %})

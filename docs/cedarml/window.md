@@ -21,13 +21,13 @@ The name of the window's event handler function.
 ## Children
 This element may contain the following child elements
 
-| Element                            | Count |
-|------------------------------------|-------|
-| [`<colors>`]({% link colors.md %}) | 0-1   |
-| [`<menu>`]({% link menu.md %})     | 0-1   |
-| [`<timer>`]({% link timer.md %})   | 0+    |
-| [`<global>`]({% link global.md %}) | 0+    |
-| [`<body>`](#)                      | 1     |
+| Element                                     | Count |
+|---------------------------------------------|-------|
+| [`<colors>`]({% link /cedarml/colors.md %}) | 0-1   |
+| [`<menu>`]({% link /cedarml/menu.md %})     | 0-1   |
+| [`<timer>`]({% link /cedarml/timer.md %})   | 0+    |
+| [`<global>`]({% link /cedarml/global.md %}) | 0+    |
+| [`<body>`](#)                               | 1     |
 
 ## See Also
-- [`<cedarml>`]({% link cedarml.md %})
+- [`<cedarml>`]({% link /cedarml/cedarml.md %})
