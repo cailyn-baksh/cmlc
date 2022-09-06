@@ -14,6 +14,10 @@ aux_links:
   "View Source on GitHub":
     - "//github.com/cailyn-baksh/cmlc"
 
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 defaults:
   -
     scope:

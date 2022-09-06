@@ -22,7 +22,7 @@ The following makefile, modified from the basic CE Toolchain makefile, will
 compile your GUIs into your TI-84+ CE programs. This makefile can be modified
 in any way as described in the [CE Toolchain docs](https://ce-programming.github.io/toolchain/static/makefile-options.html).
 
-{% highlight make linenos %}
+{% highlight make %}
 # ----------------------------
 # Makefile Options
 # ----------------------------
@@ -46,7 +46,7 @@ include $(shell cedev-config --makefile)
 gui: $(CML_FILES)
 
 gui/%.cml:
-    cmlc $@ -o src/gui/
+	cmlc $@ -o src/gui/
 {% endhighlight %}
 
 ## Creating the gui
