@@ -5,7 +5,7 @@ baseurl: /cmlc
 url: https://cailyn-baksh.github.io
 keep_files: [javadoc]
 
-theme: just-the-docs
+#theme: just-the-docs
 remote_theme: just-the-docs/just-the-docs
 search_enabled: true
 search:
@@ -14,6 +14,9 @@ heading_anchors: true
 aux_links:
   "View Source on GitHub":
     - "//github.com/cailyn-baksh/cmlc"
+
+plugins:
+  - jekyll-remote-theme
 
 kramdown:
   input: GFM
