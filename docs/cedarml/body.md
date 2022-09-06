@@ -1,4 +1,5 @@
 ---
+title: <body>
 parent: CedarML
 ---
 # `<body>`

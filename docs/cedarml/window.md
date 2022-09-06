@@ -1,4 +1,5 @@
 ---
+title: <window>
 parent: CedarML
 ---
 # `<window>`

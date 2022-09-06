@@ -1,3 +1,6 @@
+---
+title: CMLC
+---
 # CMLC
 A CedarML Compiler. CedarML is an XML-based markup language for describing
 [Cedar](https://cailyn-baksh.github.io/cedar/) GUIs. This compiler translates

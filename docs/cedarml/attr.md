@@ -1,4 +1,5 @@
 ---
+title: <attr>
 parent: CedarML
 ---
 # `<attr>`

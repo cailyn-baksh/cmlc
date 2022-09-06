@@ -1,4 +1,5 @@
 ---
+title: <timer>
 parent: CedarML
 ---
 # `<timer>`

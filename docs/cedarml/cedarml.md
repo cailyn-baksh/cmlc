@@ -1,4 +1,5 @@
 ---
+title: <cedarml>
 parent: CedarML
 nav_order: 1
 ---

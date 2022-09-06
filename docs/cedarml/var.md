@@ -1,4 +1,5 @@
 ---
+title: <var>
 parent: CedarML
 ---
 # `<var>`

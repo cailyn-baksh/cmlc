@@ -1,4 +1,5 @@
 ---
+title: <param>
 parent: CedarML
 ---
 # `<param>`

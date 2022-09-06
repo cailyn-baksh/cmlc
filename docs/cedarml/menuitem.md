@@ -1,4 +1,5 @@
 ---
+title: <menuitem>
 parent: CedarML
 ---
 # `<menuitem>`

@@ -1,4 +1,5 @@
 ---
+title: <global>
 parent: CedarML
 ---
 # `<global>`

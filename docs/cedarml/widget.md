@@ -1,4 +1,5 @@
 ---
+title: <widget>
 parent: CedarML
 ---
 # `<widget>`

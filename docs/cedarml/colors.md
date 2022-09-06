@@ -1,4 +1,5 @@
 ---
+title: <colors>
 parent: CedarML
 ---
 # `<colors>`
