@@ -115,14 +115,17 @@ by including the necessary header files.
 Add an event handler for the main window. Since this window doesn't do
 anything, the event handler will be empty.
 {% highlight xml linenos %}
+{% raw %}
 CALLBACKRESULT mainWindowHandler(CedarWindow *self, EVENT event, uint24_t param) {
 
 }
+{% endraw %}
 {% endhighlight %}
 
 Finally, add the main function. In `main` you will initialize Cedar, call the
 display function for your window, and then clean up Cedar.
 {% highlight xml linenos %}
+{% raw %}
 int main() {
     cedar_Init();
 
@@ -131,10 +134,12 @@ int main() {
     cedar_Cleanup();
     return 0;
 }
+{% endraw %}
 {% endhighlight %}
 
 The final C file should be:
 {% highlight xml linenos %}
+{% raw %}
 #include <cedar.h>
 
 #include "ids.h"
@@ -152,4 +157,5 @@ int main() {
     cedar_Cleanup();
     return 0;
 }
+{% endraw %}
 {% endhighlight %}
