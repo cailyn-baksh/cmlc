@@ -85,7 +85,7 @@ The final CML file should be:
         </body>
     </window>
 </cedarml>
-{% highlight xml linenos %}
+{% endhighlight %}
 
 ## Writing the C
 
