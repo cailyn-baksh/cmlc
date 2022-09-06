@@ -4,7 +4,16 @@ A CedarML Compiler. CedarML is an XML-based markup language for describing
 CedarML into valid C code, in order to simplify the creation of Cedar GUIs.
 
 ## Usage
-Usage coming soon. `cmlc -h` provides a brief usage message.
+```
+Usage: cmlc FILE [OPTIONS...]
+Compiles CedarML files into C source code.
+
+ FILE               : The source file to compile
+ -h (--help)        : Display this help message (default: true)
+ -o (--output) PATH : Place output in this folder. (default: ./gui/)
+ -q (--quiet)       : Suppress all output (default: false)
+ -v (--verbose)     : Display verbose output (default: false)
+```
 
 ## CedarML
 CedarML (CML) is the markup language which CMLC compiles. The CML docs are

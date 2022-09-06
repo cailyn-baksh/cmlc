@@ -10,6 +10,9 @@ search_enabled: true
 search:
   tokenizer_separator: /[\s\-_]+/
 heading_anchors: true
+aux_links:
+  "View Source on GitHub":
+    - "//github.com/cailyn-baksh/cmlc"
 
 defaults:
   -
