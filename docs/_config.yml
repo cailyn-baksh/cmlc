@@ -31,7 +31,7 @@ defaults:
       nav_exclude: true
   -
     scope:
-      path: ""
+      path: "*.md"
       type: "pages"
     values:
       layout: "default"
