@@ -1,5 +1,5 @@
 ---
-title: <constructor>
+title: "&lt;constructor&gt;"
 parent: CedarML
 ---
 # `<constructor>`

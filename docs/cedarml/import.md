@@ -1,5 +1,5 @@
 ---
-title: <import>
+title: "&lt;import&gt;"
 parent: CedarML
 ---
 # `<import>`

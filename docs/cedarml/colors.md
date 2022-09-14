@@ -1,5 +1,5 @@
 ---
-title: <colors>
+title: "&lt;colors&gt;"
 parent: CedarML
 ---
 # `<colors>`

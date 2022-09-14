@@ -1,5 +1,5 @@
 ---
-title: <init>
+title: "&lt;init&gt;"
 parent: CedarML
 ---
 # `<init>`

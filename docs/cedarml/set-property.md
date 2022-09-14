@@ -1,5 +1,5 @@
 ---
-title: <set-property>
+title: "&lt;set-property&gt;"
 parent: CedarML
 ---
 # `<set-property>`
