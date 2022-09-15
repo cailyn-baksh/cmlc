@@ -98,7 +98,7 @@ public class CMLCompiler {
             loadWidgets(builtin);
         } catch (URISyntaxException e) {
             // Shouldn't happen
-            logger.fine("Error getting accessing resource " + CML_BUILTIN.toString());
+            logger.fine("Error accessing resource " + CML_BUILTIN.toString());
             logger.log(Level.FINE, e.getMessage(), e);
             return;
         }
@@ -108,7 +108,6 @@ public class CMLCompiler {
         cmlDocument = loadXMLDocument(new File(srcFile));
 
         // Load widgets from document
-        logger.info("Parsing widgets");
         loadWidgets(cmlDocument);
 
         // Import widgets
@@ -136,13 +135,14 @@ public class CMLCompiler {
         LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(file));
         Source src = new StreamSource(lineNumberReader);
 
-        logger.finer("Loading RELAX NG Schema");
+        logger.finest("Loading RELAX NG Schema");
         SchemaFactory schemaFactory = CompactSyntaxSchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
         Schema schema;
 
         try {
             schema = schemaFactory.newSchema(CML_SCHEMA);
         } catch (SAXException e) {
+            logger.fine("Exception while parsing schema:");
             logger.log(Level.FINE, e.getMessage(), e);
             return null;  // shouldnt happen
         }
@@ -150,7 +150,7 @@ public class CMLCompiler {
         Validator validator = schema.newValidator();
 
         try {
-            logger.fine("Validating file");
+            logger.finer("Validating file");
             validator.validate(src);
         } catch (SAXException e) {
             throw new CMLParseException("%s:%d: %s".formatted(file, lineNumberReader.getLineNumber(), e.getMessage()));
@@ -159,7 +159,7 @@ public class CMLCompiler {
         lineNumberReader.close();
 
         // Load document
-        logger.fine("Loading file into DOM");
+        logger.finest("Loading file into DOM");
         SAXReader saxReader = new SAXReader();
         Document doc = saxReader.read(file);
 
@@ -173,13 +173,13 @@ public class CMLCompiler {
      */
     private void loadWidgets(Document doc) {
         List<Node> widgetNodes = doc.selectNodes("/cedarml/widget");
-        logger.info("Discovered %d widget declarations".formatted(widgetNodes.size()));
+        logger.fine("Found %d widget declarations".formatted(widgetNodes.size()));
 
         for (Node node : widgetNodes) {
             CMLWidgetSchema schema = new CMLWidgetSchema();
             String widgetName = node.valueOf("@name");
 
-            logger.fine("Found widget " + widgetName);
+            logger.finer("Widget " + widgetName);
 
             // Set content type if applicable
             Node contentTypeNode = node.selectSingleNode("@contentType");
@@ -195,7 +195,8 @@ public class CMLCompiler {
 
                 // Set the type of the attr
                 // @type guaranteed by schema
-                attrSchema.type = CedarMLType.fromString(attrNode.valueOf("@type"));
+                String attrType = attrNode.valueOf("@type");
+                attrSchema.type = CedarMLType.fromString(attrType);
 
                 // Set the default value if specified
                 Node defaultValueNode = attrNode.selectSingleNode("@default");
@@ -204,8 +205,11 @@ public class CMLCompiler {
                 }
 
                 // Add the attr to the widget schema
+                String attrName = attrNode.valueOf("@name");  // @name guaranteed by schema
+                logger.finer("Attribute " + attrName + " with type " + attrType +
+                        ((defaultValueNode != null) ? " and default value " + attrSchema.defaultValue : ""));
                 schema.attrs.put(
-                        attrNode.valueOf("@name"),  // @name guaranteed by schema
+                        attrName,
                         attrSchema
                 );
             }
@@ -214,7 +218,6 @@ public class CMLCompiler {
             Node ctorNode = node.selectSingleNode("constructor");
             if (ctorNode != null) {
                 // Constructor is specified
-                logger.finer("Found constructor");
                 schema.ctor.name = ctorNode.valueOf("@name");  // @name guaranteed by schema
 
                 // Get constructor parameters
@@ -222,6 +225,8 @@ public class CMLCompiler {
                 for (Node paramNode : paramNodes) {
                     schema.ctor.params.add(paramNode.getText());
                 }
+
+                logger.finer("Found constructor %s with %d parameters".formatted(schema.ctor.name, paramNodes.size()));
             }
 
             // Load initialization if specified
@@ -249,7 +254,7 @@ public class CMLCompiler {
         CodeWriter header = new CodeWriter(outDir + baseFileName + ".h");
         CodeWriter source = new CodeWriter(outDir + baseFileName + ".c");
 
-        logger.fine("Writing boilerplate code");
+        logger.finest("Writing boilerplate code");
 
         // Write generator ID comments
         header.ln(GENERATOR_COMMENT);
@@ -288,13 +293,13 @@ public class CMLCompiler {
 
         // Generate window functions
         List<Node> windowNodes = cmlDocument.selectNodes("/cedarml/window");
-        logger.info("Found %d window declarations".formatted(windowNodes.size()));
+        logger.fine("Found %d window declarations".formatted(windowNodes.size()));
         for (Node windowNode : windowNodes) {
             String winName = windowNode.valueOf("@name");
             String fnName = funcName(winName);  // @name guaranteed by schema
             String handler = windowNode.valueOf("@handler");  // @handler guaranteed by schema
 
-            logger.fine("Creating window " + winName);
+            logger.info("Generating window " + winName);
 
             // Begin method
             source.ln("void %s() {", fnName);
@@ -314,7 +319,7 @@ public class CMLCompiler {
             Node menuNode = windowNode.selectSingleNode("menu");
             if (menuNode != null) {
                 // Menu is specified
-                logger.info("Generating menu");
+                logger.fine("Generating menu");
                 String menuVar = generateMenu(menuNode, source);
                 source.ln("cedar_SetMenu(&window, &%s);", menuVar);
                 source.ln("");
@@ -322,23 +327,23 @@ public class CMLCompiler {
 
             // Add timers
             List<Node> timerNodes = windowNode.selectNodes("timer");
-            logger.info("Found %d timers".formatted(timerNodes.size()));
+            logger.fine("Found %d timers".formatted(timerNodes.size()));
             for (Node timerNode : timerNodes) {
                 String timerID = timerNode.valueOf("@id");  // @id guaranteed by schema
                 String period = timerNode.valueOf("@period");  // @period guaranteed by schema
-                logger.fine("Adding timer " + timerID);
+                logger.finer("Adding timer " + timerID);
                 source.ln("cedar_AddTimer(&window, %s, %s);", timerID, period);
             }
 
             source.ln();
 
             // Generate body
-            logger.info("Generating body");
+            logger.fine("Generating body");
             source.ln("/* Widgets */");
             // node /body guaranteed by schema
             Node bodyNode = windowNode.selectSingleNode("body");
             List<Node> bodyContents = bodyNode.selectNodes("*");
-            logger.fine("Found %d widgets".formatted(bodyContents.size()));
+            logger.finer("Found %d widgets".formatted(bodyContents.size()));
             for (Node child : bodyContents) {
                 String childTagName = child.getName();
 
@@ -349,12 +354,16 @@ public class CMLCompiler {
                     String defaultVal = child.valueOf("@default");
 
                     if (defaultVal.equals("")) {
+                        logger.finer("Declared variable %s with type %s".formatted(name, ctype));
                         source.ln("%s %s;", ctype, name);
                     } else {
+                        logger.finer("Assigned variable %s with type %s to %s".formatted(name, ctype, defaultVal));
                         source.ln("%s %s = %s;", ctype, name, defaultVal);
                     }
                 } else {
                     // User defined widget
+                    logger.finer("Widget " + childTagName);
+
                     if (!widgetSchemas.containsKey(childTagName)) {
                         // Widget is not defined
                         throw new CMLParseException("%s: Widget '%s' is undefined".formatted(srcFile, childTagName));
@@ -468,6 +477,8 @@ public class CMLCompiler {
     private void generateGlobals(CodeWriter inc, CodeWriter src) {
         List<Node> globals = cmlDocument.selectNodes("//globals");
 
+        if (globals.size() == 0) return;  // Don't do anything if there are no globals
+
         // Don't declare externs in the source file
         inc.ln("#ifndef __CMLC_GENERATED_%s_C_", baseFileName.toUpperCase());
 
@@ -527,6 +538,7 @@ public class CMLCompiler {
 
             switch (type) {
                 case "separator": {
+                    logger.finest("Adding menu separator");
                     src.ln("cedar_AddMenuSeparator(&%s);", menuVar);
                     break;
                 }
@@ -534,6 +546,7 @@ public class CMLCompiler {
                     // @id and @label guaranteed by schema
                     String id = menuitem.valueOf("@id");
                     String label = menuitem.valueOf("@label");
+                    logger.finest("Adding menu item '%s' (%s)".formatted(label, id));
                     src.ln("cedar_AddMenuItem(&%s, %s, \"%s\");", menuVar, id, label);
                     break;
                 }
@@ -543,11 +556,15 @@ public class CMLCompiler {
                     String label = menuitem.valueOf("@label");
                     Node submenu = menuitem.selectSingleNode("menu");
 
+                    logger.finest("Entering submenu '%s' (%s)".formatted(label, id));
+
                     src.indent();
                     String submenuVar = generateMenu(submenu, src);
                     src.ln("cedar_AddSubmenu(&%s, %s, \"%s\", &%s);",
                             menuVar, id, label, submenuVar);
                     src.outdent();
+
+                    logger.finest("Exiting submenu '%s' (%s)".formatted(label, id));
                     break;
                 }
             }

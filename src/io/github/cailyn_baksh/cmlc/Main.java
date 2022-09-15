@@ -33,7 +33,7 @@ public class Main {
     private boolean verbose;
 
     @Option(name="--debug", forbids={"-v", "-q"}, hidden=true, usage="Display debugging information during compilation")
-    private boolean debug;
+    private int debug = 0;
 
     @Argument(required=true, usage="The source file to compile", metaVar="FILE")
     private String srcFile;
@@ -94,8 +94,26 @@ public class Main {
             logger.setLevel(Level.SEVERE);
         } else if (verbose) {
             logger.setLevel(Level.INFO);
-        } else if (debug) {
-            logger.setLevel(Level.FINEST);
+        } else if (debug != 0) {
+            /*
+             * Level 1 debugging:
+             *  Logs parsing steps as well as internal errors that should not
+             *  occur under normal circumstances/in release code.
+             * Level 2 debugging:
+             *  Provides detailed logs on parsing and code generation. Level 2
+             *  debugging should provide insight into what the compiler is
+             *  thinking, in order to diagnose improper output.
+             * Level 3 debugging:
+             *  All events are logged as they occur. In the case of a fatal bug
+             *  level 3 debugging should be able to be used to trace the bug
+             *  to the exact point where it occurred.
+             */
+            switch (debug) {
+                case 1 -> logger.setLevel(Level.FINE);
+                case 2 -> logger.setLevel(Level.FINER);
+                case 3 -> logger.setLevel(Level.FINEST);
+                // what should be done in the default case?
+            }
         } else {
             logger.setLevel(Level.WARNING);
         }
@@ -107,6 +125,8 @@ public class Main {
         // Get base file name
         baseFileName = srcFile.substring(0, srcFile.lastIndexOf('.'));
         baseFileName = baseFileName.substring(baseFileName.lastIndexOf('/')+1);
+
+        logger.info("Loading CML input");
 
         CMLCompiler compiler;
         try {
@@ -128,6 +148,7 @@ public class Main {
             return;
         }
 
+        logger.info("Generating C output");
         try {
             compiler.generateC();
         } catch (IOException e) {
